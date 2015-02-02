@@ -167,6 +167,12 @@ class Event extends Component
      */
     protected $cancelled;
 
+    /**
+     * Comma separated list of categories.
+     * @var string
+     */
+    protected $categories;
+
     public function __construct($uniqueId = null)
     {
         if (null == $uniqueId) {
@@ -216,7 +222,6 @@ class Event extends Component
 
         if (null != $this->location) {
             $this->properties->set('LOCATION', $this->location);
-
             if (null != $this->locationGeo) {
                 $this->properties->add(
                     new Property(
@@ -257,6 +262,12 @@ class Event extends Component
             $this->properties->set('ORGANIZER', $this->organizer);
         }
 
+        if (is_array($this->categories)) {
+            $this->properties->add(
+              $this->buildCategoryList())
+            ;
+        }
+
         if ($this->noTime) {
             $this->properties->set('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE');
         }
@@ -284,6 +295,14 @@ class Event extends Component
         // reset the custom values
         $this->useTimezone  = $customUseTZ;
         $this->useUtc       = $customUseUTC;
+    }
+
+    protected function buildCategoryList() {
+        $escaped = [];
+        for ($x=0,$c=count($this->categories); $x<$c; $x++) {
+            $escaped[] = (new Property\StringValue($this->categories[$x]))->getEscapedValue();
+        }
+        return new Property('CATEGORIES', implode(',', $escaped));
     }
 
     /**
@@ -480,6 +499,18 @@ class Event extends Component
     {
         $this->useTimezone = $useTimezone;
         return $this;
+    }
+
+    /**
+     * @param array|string $categories
+     * @return $this
+     */
+    public function setCategories($categories) {
+        $this->categories = is_array($categories) ? $categories : array($categories);
+        return $this;
+    }
+    public function getCategories() {
+        return $this->categories;
     }
 
     /**
