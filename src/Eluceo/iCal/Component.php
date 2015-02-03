@@ -39,6 +39,15 @@ abstract class Component
     abstract public function getType();
 
     /**
+     * Gets the array of components.
+     *
+     * @return Component[]
+     */
+    public function getComponents() {
+        return $this->components;
+    }
+
+    /**
      * Adds a Component
      *
      * If $key is given, the component at $key will be replaced else the component will be append.
