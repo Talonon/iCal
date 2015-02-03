@@ -469,6 +469,13 @@ class Event extends Component
     }
 
     /**
+     * @return null|string
+     */
+    public function getUniqueId() {
+        return $this->uniqueId;
+    }
+
+    /**
      * @param $uniqueId
      *
      * @return $this
