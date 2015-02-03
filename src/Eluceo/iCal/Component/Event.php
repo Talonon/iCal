@@ -447,6 +447,13 @@ class Event extends Component
     }
 
     /**
+     * @return int
+     */
+    public function getSequence() {
+        return $this->sequence;
+    }
+
+    /**
      * @param $organizer
      *
      * @return $this
